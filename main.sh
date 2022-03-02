@@ -45,8 +45,12 @@ if [[ -f "$hosts_file" ]]; then
     export HOST_TITLE="SSH Host"
 fi
 
-PR_SHA=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.head.sha)
-[[ 'null' != $PR_SHA ]] && export GITHUB_SHA="$PR_SHA"
+if [ -z "$CUSTOM_SHA" ]; then
+  PR_SHA=$(cat $GITHUB_EVENT_PATH | jq -r .pull_request.head.sha)
+  [[ 'null' != $PR_SHA ]] && export GITHUB_SHA="$PR_SHA"
+else
+  export GITHUB_SHA="$CUSTOM_SHA"
+fi
 
 if [[ -n "$SITE_NAME" ]]; then
     export SITE_TITLE="Site"
